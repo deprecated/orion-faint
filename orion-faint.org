@@ -1,0 +1,221 @@
+* Faint lines in Orion
+Serendipitous observations of faint lines that lie in the same echelle order as strong lines:
++ C II 6578
++ He I 5016
++ [Fe IV] 6740
+** What about the weak lines near [S II]?
++ Why are these not in the long list from the MUSE dataset?
+  + [[file:~/Dropbox/orion-widths/line-all-wav-grid.pdf][file:~/Dropbox/orion-widths/line-all-wav-grid.pdf]]
+  + [[file:~/Dropbox/orion-widths/basic-line-list.tab][file:~/Dropbox/orion-widths/basic-line-list.tab]]
++ Can we actually see it in any spectra?
++ Maybe found it in Orion horizontal slits
+  + [[file:~/Work/SPM2007/horizontal_slits/os110b.fits][file:~/Work/SPM2007/horizontal_slits/os110b.fits]]
+  + Seems to be at 6738.3 +/- 1 \AA
+  + [[file:~/Work/SPM2007/horizontal_slits/os110-111-transf.fits][file:~/Work/SPM2007/horizontal_slits/os110-111-transf.fits]] is better since it has the CR removed
+  + On the ~siil~ spectra, I sometimes see a component at +250 km/s
+    + 6730.8 (1 + 250/3e5) = 6736.4
+    + Could this be the same?
+    + Peaks spatially in the north, strangely
+  + And another one (cut off) at about +350
+    + 6730.8 (1 + 350/3e5) = 6738.6
+    + That is more like it
+    + Peaks spatially at the bar
+  + There is an even weaker line at 6728.9 +/- 1
+    + [Co II] 6728
+    + [Fe II] 6729.87
+      + But no other lines of this multiplet are observed
+    + N III lines at 6729 seems more likely
+    + About 70 times weaker than [S II] 6731
+    + [ ] Velocity shift of 6729 wrt 6730.816 is -80.9 km/s, so should be visible on lots of ~siil~ spectra
+      + I actually only see a component at about 54 km/s blueshifted from 6731 peak
+      + Although sometimes it is -70 as in ~siil051+5.7wcsb.fits~
+        + But note that that spectrum has a ghost
+  + And a really weak one at 6702.1 +/- 1
+    + This looks most interesting since it is confined spatially
+    + Maybe 6701.39 [Fe IV], but seems unlikely
+    + There are some C II and N II permitted lines - also unlikely
+    + We see a component blueshifted by 360 km/s in some ~siis~ spectra
+      + 6716.4 (1 - 360/3e5) = 6708.34
+      + Why is that so different? Are they ghosts? perhaps from another order
+      + Seen for instance in ~siis054+11.5wcsb.fits~
++ Atomic line list gives the following possibilities in range 6738 to 6739:
+  + [Co V] 6738.4
+  + [Co IV] 6738.7
+  + But they are both from very excited levels
++ [Fe IV] line is 6739.8, but there is another component of same multiplet at 6734.4, which should only be 4 times weaker
+  + And this is not seen
+** Lines near [O III] 5007
++ 4996.3
+  + Cannot be N II 4994.37, since that is a very long way off
+  + We do see a hint of an even weaker line at 4994.37 though
+  + There is [Mn III] 4996.01 - looks a bit too blue
+  + There is semi-forbidden Fe II] 4996.4136
+  + There is permitted line O II 4996.422
+    + But the same multiplet has components at 4995.15, which are not seen
+  + NIST finds Ar II 4996.782
+  + NIST has a bunch of N II lines (including the 4994.37 one), but none of the wavelengths seem to match up very well
++ 5016.0
+  + Certainly He I 5015.68
+  + Detected with MUSE
++ 5017.5
+  + N II 5017.2 also has other multiplet components at 4995.9 and 4995.7
+    + So could be both!
+  + NIST finds Ar II 5017.1626 and 5017.6337 (unrelated multiplets)
+
+** Orion S slits from 2007
+*** Get all H\alpha spectra
+#+BEGIN_SRC python
+  import glob
+  from astropy.io import fits
+  files = glob.glob("/Users/will/Work/SPM2007/os???.fits")
+  spectra = []
+  for file_ in files:
+      hdu, = fits.open(file_)
+      has_RA = hdu.header.get("RA") and "05:3" in hdu.header.get("RA")
+      has_Dec = hdu.header.get("Dec") and "-05:" in hdu.header.get("Dec")
+      has_halpha = hdu.header.get("FILTER") and "H alpha" in hdu.header.get("FILTER")
+      has_300 = hdu.header.get("EXPTIME") == 300000
+      if has_RA and has_Dec and has_halpha and has_300:
+          spectra.append(file_)
+  return spectra
+#+END_SRC
+
+#+name: ha-spectra
+#+RESULTS:
+| /Users/will/Work/SPM2007/os038.fits | /Users/will/Work/SPM2007/os039.fits | /Users/will/Work/SPM2007/os042.fits | /Users/will/Work/SPM2007/os043.fits | /Users/will/Work/SPM2007/os046.fits | /Users/will/Work/SPM2007/os047.fits | /Users/will/Work/SPM2007/os056.fits | /Users/will/Work/SPM2007/os057.fits | /Users/will/Work/SPM2007/os060.fits | /Users/will/Work/SPM2007/os061.fits | /Users/will/Work/SPM2007/os064.fits | /Users/will/Work/SPM2007/os065.fits | /Users/will/Work/SPM2007/os068.fits | /Users/will/Work/SPM2007/os069.fits | /Users/will/Work/SPM2007/os072.fits | /Users/will/Work/SPM2007/os073.fits | /Users/will/Work/SPM2007/os076.fits | /Users/will/Work/SPM2007/os077.fits | /Users/will/Work/SPM2007/os080.fits | /Users/will/Work/SPM2007/os081.fits | /Users/will/Work/SPM2007/os084.fits | /Users/will/Work/SPM2007/os085.fits | /Users/will/Work/SPM2007/os088.fits | /Users/will/Work/SPM2007/os089.fits | /Users/will/Work/SPM2007/os093.fits | /Users/will/Work/SPM2007/os094.fits | /Users/will/Work/SPM2007/os097.fits | /Users/will/Work/SPM2007/os100.fits | /Users/will/Work/SPM2007/os101.fits | /Users/will/Work/SPM2007/os105.fits |
+
+#+BEGIN_SRC python
+  import glob
+  import os
+  from astropy.io import fits
+  files = glob.glob("/Users/will/Work/SPM2007/os???.fits")
+  spectra = []
+  for file_ in files:
+      hdu, = fits.open(file_)
+      has_RA = hdu.header.get("RA") and "05:3" in hdu.header.get("RA")
+      has_Dec = hdu.header.get("Dec") and "-05:" in hdu.header.get("Dec")
+      filter_name = hdu.header.get("FILTER") 
+      exptime = hdu.header.get("EXPTIME")
+      if has_RA and has_Dec:
+          spectra.append([filter_name, os.path.basename(file_), exptime])
+  return spectra
+#+END_SRC
+
+#+RESULTS:
+| [S II]  | os067.fits | 100000 |
+| H alpha | os088.fits | 300000 |
+| [S II]  | os071.fits | 100000 |
+| [S II]  | os051.fits |    100 |
+| H alpha | os102.fits | 200000 |
+| H alpha | os047.fits | 300000 |
+| H alpha | os084.fits | 300000 |
+| [S II]  | os092.fits | 100000 |
+| H alpha | os093.fits | 300000 |
+| H alpha | os085.fits | 300000 |
+| [S II]  | os103.fits | 100000 |
+| H alpha | os046.fits | 300000 |
+| [S II]  | os050.fits |    100 |
+| H alpha | os070.fits | 200000 |
+| H alpha | os066.fits | 200000 |
+| H alpha | os089.fits | 300000 |
+| [S II]  | os112.fits | 200000 |
+| H alpha | os057.fits | 300000 |
+| [S II]  | os104.fits | 300000 |
+| H alpha | os041.fits | 100000 |
+| H alpha | os082.fits | 200000 |
+| H alpha | os094.fits | 300000 |
+| [O III] | os108.fits | 300000 |
+| H alpha | os061.fits | 300000 |
+| [S II]  | os036.fits | 100000 |
+| H alpha | os077.fits | 300000 |
+| [S II]  | os098.fits | 100000 |
+| H alpha | os076.fits | 300000 |
+| [S II]  | os099.fits | 100000 |
+| [S II]  | os037.fits | 100000 |
+| H alpha | os060.fits | 300000 |
+| [O III] | os109.fits | 200000 |
+| H alpha | os095.fits | 200000 |
+| [S II]  | os083.fits | 100000 |
+| H alpha | os105.fits | 300000 |
+| H alpha | os040.fits | 200000 |
+| H alpha | os056.fits | 300000 |
+| [S II]  | os096.fits | 100000 |
+| [S II]  | os079.fits | 100000 |
+| H alpha | os038.fits | 300000 |
+| H alpha | os080.fits | 300000 |
+| H alpha | os043.fits | 300000 |
+| H alpha | os106.fits | 200000 |
+| [S II]  | os055.fits | 100000 |
+| [S II]  | os110.fits | 500000 |
+| [S II]  | os075.fits | 100000 |
+| H alpha | os034.fits |   5000 |
+| [S II]  | os063.fits | 100000 |
+| [S II]  | os059.fits | 100000 |
+| H alpha | os058.fits | 200000 |
+| H alpha | os062.fits | 200000 |
+| [S II]  | os035.fits |   5000 |
+| H alpha | os074.fits | 200000 |
+| [S II]  | os054.fits | 100000 |
+| [S II]  | os111.fits | 500000 |
+| H alpha | os042.fits | 300000 |
+| [O III] | os107.fits | 300000 |
+| H alpha | os081.fits | 300000 |
+| H alpha | os039.fits | 300000 |
+| H alpha | os097.fits | 300000 |
+| H alpha | os078.fits | 200000 |
+| H alpha | os073.fits | 300000 |
+| H alpha | os065.fits | 300000 |
+| [S II]  | os049.fits |    100 |
+| H alpha | os090.fits | 200000 |
+| H alpha | os086.fits | 200000 |
+| H alpha | os069.fits | 300000 |
+| [S II]  | os045.fits | 100000 |
+| H alpha | os100.fits | 300000 |
+| [S II]  | os053.fits |    100 |
+| [S II]  | os052.fits |    100 |
+| H alpha | os044.fits | 200000 |
+| H alpha | os101.fits | 300000 |
+| [S II]  | os087.fits | 100000 |
+| H alpha | os068.fits | 300000 |
+| [S II]  | os091.fits | 100000 |
+| H alpha | os048.fits | 200000 |
+| H alpha | os064.fits | 300000 |
+| H alpha | os033.fits |    500 |
+| H alpha | os072.fits | 300000 |
+
+*** Co-add all the spectra with 3-sigma clipping
+#+BEGIN_SRC python :var files=ha-spectra :results output
+  import numpy as np
+  from astropy.io import fits
+  from astropy.stats import sigma_clip
+  frames = [fits.open(fn)[0].data for fn in files[0]]
+  cube = np.dstack(frames)
+  best = sigma_clip(cube, axis=2).mean(axis=2).data
+  strip = 0.5*(best[:,:50].mean(axis=1) + best[:,-50:].mean(axis=1)) 
+  best -= strip[:,None]
+  fits.PrimaryHDU(best).writeto("all-slits.fits", clobber=True)
+#+END_SRC
+
+#+RESULTS:
+: WARNING: Overwriting existing file 'all-slits.fits'. [astropy.io.fits.hdu.hdulist]
+
+See Skitch image in Evernote
+
+
+#+BEGIN_SRC python
+from astropy.io import fits
+pairs = 68, 69
+hdus = [fits.open("/Users/will/Work/SPM2007/os{:03d}.fits".format(i))[0] for i in pair]
+best = 0.5*(hdus[0].data + hdus[1].data)
+delta = hdus[0].data - hdus[1].data
+use1 = delta > 3.0*delta.std()
+use0 = delta < -3.0*delta.std()
+best[use0] = hdus[0].data[use0]
+best[use1] = hdus[1].data[use1]
+newhdu = fits.PrimaryHDU(best, hdus[0].header)
+newhdu.writeto("combined-{}-{}.fits".format(*pair), clobber=True)
+#+END_SRC
+
+#+RESULTS:
+: None
+
