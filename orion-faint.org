@@ -54,6 +54,9 @@ Serendipitous observations of faint lines that lie in the same echelle order as 
     + But the same multiplet has components at 4995.15, which are not seen
   + NIST finds Ar II 4996.782
   + NIST has a bunch of N II lines (including the 4994.37 one), but none of the wavelengths seem to match up very well
++ *New* 5011.4 [Fe III]
+  + shows up clearly on vstack.oiii
++ *New* 5010.9 XXX?
 + 5016.0
   + Certainly He I 5015.68
   + Detected with MUSE
